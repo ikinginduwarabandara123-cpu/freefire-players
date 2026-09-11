@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Free Fire Player Profile</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #101010;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: #1b1b1b;
+            border-radius: 22px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ff7a00;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 5px 0 20px;
+            font-size: 28px;
+        }
+
+        .info {
+            text-align: left;
+            background: #262626;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 12px 5px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #aaa;
+        }
+
+        .value {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #ff7a00;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .error {
+            color: #ff7070;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card" id="profile">
+    Loading...
+</div>
+
+<script>
+
+const players = {
+
+    "123456789": {
+        name: "INDU FF",
+        id: "123456789",
+        guild: "DARK KINGS",
+        level: "67",
+        picture: "players/123456789.jpg"
+    },
+
+    "987654321": {
+        name: "EXAMPLE PLAYER",
+        id: "987654321",
+        guild: "FREE FIRE",
+        level: "55",
+        picture: "players/987654321.jpg"
+    }
+
+};
+
+
+const params = new URLSearchParams(window.location.search);
+const playerID = params.get("id");
+
+const player = players[playerID];
+
+const profile = document.getElementById("profile");
+
+
+if (!player) {
+
+    profile.innerHTML = `
+        <div class="error">
+            Player profile not found.
+        </div>
+    `;
+
+} else {
+
+    profile.innerHTML = `
+
+        <img
+            class="profile-picture"
+            src="${player.picture}"
+            alt="Player Picture"
+            onerror="this.src='players/default.jpg'"
+        >
+
+        <h1>${player.name}</h1>
+
+        <div class="info">
+
+            <div class="row">
+                <span class="label">Player ID</span>
+                <span class="value">${player.id}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Guild</span>
+                <span class="value">${player.guild}</span>
+            </div>
+
+            <div class="row">
+                <span class="label">Level</span>
+                <span class="value">${player.level}</span>
+            </div>
+
+        </div>
+
+        <button onclick="copyPlayerID()">
+            Copy Player ID
+        </button>
+    `;
+}
+
+
+function copyPlayerID() {
+
+    if (!player) return;
+
+    navigator.clipboard.writeText(player.id)
+        .then(() => {
+            alert("Player ID copied!");
+        })
+        .catch(() => {
+            alert("Could not copy Player ID.");
+        });
+}
+
+</script>
+
+</body>
+</html>
